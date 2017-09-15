@@ -14,7 +14,7 @@ DisplaySSD1306::DisplaySSD1306(uint8_t sda, uint8_t scl)
 
 DisplaySSD1306::~DisplaySSD1306()
 {}
-  
+
 
 /*******************/
 /* Image functions */

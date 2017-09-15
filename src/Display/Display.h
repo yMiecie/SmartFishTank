@@ -18,8 +18,6 @@ enum class DISPLAY_TEXT_ALIGNMENT {
 
 class Display {
 public:
-  virtual ~Display();
-
   /*******************/
   /* Image functions */
   /*******************/
@@ -60,7 +58,6 @@ public:
 
   // Clear the local pixel buffer
   virtual void clear(void) = 0;
-
 };
 
 #endif
