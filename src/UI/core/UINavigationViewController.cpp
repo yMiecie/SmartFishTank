@@ -12,10 +12,10 @@ UINavigationViewController::UINavigationViewController(UIViewController* viewCon
   viewControllers.push_back(viewController);
 }
 
-void UINavigationViewController::viewDidLoad(){
+void UINavigationViewController::viewDidLoad() {
   show(currentViewController, false);
 }
 
-void show(UIViewController* viewController, bool animated) {
-  
+void UINavigationViewController::show(UIViewController* viewController, bool animated) {
+
 }

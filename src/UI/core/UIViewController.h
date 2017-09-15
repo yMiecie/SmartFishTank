@@ -19,6 +19,8 @@ public:
 
   UIView* view;
 
+  void loop();
+
 protected:
   virtual void viewDidLoad();
   virtual void viewWillAppear();

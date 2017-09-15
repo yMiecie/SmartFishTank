@@ -39,9 +39,8 @@ void setup() {
 int incomingByte = 0;
 
 void loop() {
-  _screen->update();
 
-  // send data only when you receive data:
+  // Read data on serial
   if (Serial.available() > 0) {
           // read the incoming byte:
           incomingByte = Serial.read();
@@ -50,6 +49,17 @@ void loop() {
           Serial.print("I received: ");
           Serial.printf("%c\n", incomingByte);
   }
+
+  // Update UIScreen
+  int remainingTimeBudget = _screen->update();
+
+  if (remainingTimeBudget > 0) {
+    // You can do some work here
+    // Don't do stuff if you are below your
+    // time budget.
+    delay(remainingTimeBudget);
+  }
+
 }
 
 /*#include <Wire.h>  // Only needed for Arduino 1.6.5 and earlier

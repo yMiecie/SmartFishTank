@@ -15,16 +15,29 @@ UIScreen::UIScreen(Display *display)
 UIScreen::~UIScreen()
 {}
 
-void UIScreen::setTargetFPS(uint8_t fps){
+void UIScreen::setTargetFPS(uint8_t fps) {
   float oldInterval = m_updateInterval;
   m_updateInterval = ((float) 1.0 / (float) fps) * 1000;
 
   // Calculate new ticksPerFrame
-  float changeRatio = oldInterval / (float) updateInterval;
-  ticksPerFrame *= changeRatio;
+  float changeRatio = oldInterval / (float) m_updateInterval;
+  m_ticksPerFrame *= changeRatio;
 }
 
-void UIScreen::update() {
+int8_t UIScreen::update(){
+  long frameStart = millis();
+  int8_t timeBudget = m_updateInterval - (frameStart - m_state.lastUpdate);
+  if ( timeBudget <= 0) {
+    // Implement frame skipping to ensure time budget is keept
+    if (m_state.lastUpdate != 0) m_state.ticksSinceLastStateSwitch += ceil(-timeBudget / m_updateInterval);
+
+    m_state.lastUpdate = frameStart;
+    draw();
+  }
+  return m_updateInterval - (millis() - frameStart);
+}
+
+void UIScreen::draw() {
 
   if (m_displayedViewController != viewController)
   {
@@ -58,20 +71,4 @@ void UIScreen::update() {
     }
     m_display->display();
   }
-
-  delay(10);
-}
-
-
-int8_t UIScreen::update(){
-  long frameStart = millis();
-  int8_t timeBudget = m_updateInterval - (frameStart - m_state.lastUpdate);
-  if ( timeBudget <= 0) {
-    // Implement frame skipping to ensure time budget is keept
-    if (m_state.lastUpdate != 0) m_state.ticksSinceLastStateSwitch += ceil(-timeBudget / m_updateInterval);
-
-    m_state.lastUpdate = frameStart;
-    tick();
-  }
-  return m_updateInterval - (millis() - frameStart);
 }

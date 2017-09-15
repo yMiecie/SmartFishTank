@@ -8,10 +8,11 @@
 #define UINAVIGATIONVIEWCONTROLLER_H
 
 #include <Arduino.h>
+#include <vector>
 
-class UIViewController
+#include "UIViewController.h"
 
-class UINavigationViewController {
+class UINavigationViewController: public UIViewController {
 public:
   UINavigationViewController(UIViewController* rootViewController);
   ~UINavigationViewController();
@@ -23,10 +24,16 @@ public:
   void popViewController(boolean animated);
   void popToRootViewController(boolean animated);
 
+protected:
+  virtual void viewDidLoad();
+  virtual void viewWillAppear();
+  virtual void viewDidAppear();
+  virtual void viewWillDesappear();
+  virtual void viewDidDesappear();
+
 private:
   void loadView();
+  void show(UIViewController* viewController, bool animated);
 };
-
-#endif
 
 #endif

@@ -35,6 +35,6 @@ void UIViewController::viewWillDesappear() {
 void UIViewController::viewDidDesappear() {
 }
 
-void UIViewController::Loop() {
-  
+void UIViewController::loop() {
+
 }
