@@ -4,8 +4,6 @@
 /* P-Name:  Smart Fish Tank */
 /****************************/
 
-#include <Arduino.h>
-#include <vector>
 #include "Button.h"
 
 void defaultButtonHandler(uint8_t pin) {}

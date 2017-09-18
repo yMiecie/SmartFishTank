@@ -4,6 +4,9 @@
 /* P-Name:  Smart Fish Tank */
 /****************************/
 
+#include <Arduino.h>
+#include <vector>
+
 #ifndef BUTTON_H
 #define BUTTON_H
 
@@ -21,7 +24,7 @@ typedef void(*ButtonHandler)(const uint8_t pin); // The parameter is the pin of 
 
 class Button{
 public:
-  Button(const uint8_t pin, const BUTTON_TYPE type);
+  Button(uint8_t pin, BUTTON_TYPE type);
   ~Button();
 
   void setHandler(const ButtonHandler handler, const BUTTON_STATE state);
