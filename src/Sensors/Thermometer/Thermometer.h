@@ -12,7 +12,6 @@
 class Thermometer
 {
     public:
-    virtual ~Thermometer();
     virtual float temperature() = 0;
 
     protected:

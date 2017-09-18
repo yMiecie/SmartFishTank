@@ -8,15 +8,34 @@
 
 ThermometerDS18B20::ThermometerDS18B20(uint8_t pin)
     :m_pin(pin)
-{}
+{
+  // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
+  OneWire oneWire =  OneWire(pin);
+
+  // Pass our oneWire reference to Dallas Temperature.
+  m_sensors =  DallasTemperature(&oneWire);
+
+  m_currentTemperature = 0;
+
+  // Start up the library
+  m_sensors.begin();
+}
 
 ThermometerDS18B20::~ThermometerDS18B20()
 {}
 
 float ThermometerDS18B20::temperature()
 {
-  m_currentTemperature = 19.0f;
-  printf("[ThermometerDS18B20::temperature] Current temperature %.2f °C.", m_currentTemperature);
+  return temperature(0);
+}
 
-    return m_currentTemperature;
+float ThermometerDS18B20::temperature(uint8_t device)
+{
+  DeviceAddress tempDeviceAddress;
+
+  if (m_sensors.getAddress(tempDeviceAddress, device)) {
+    m_sensors.requestTemperatures(); // Send the command to get temperatures
+    m_currentTemperature = m_sensors.getTempCByIndex(device);
+  }
+  return m_currentTemperature;
 }

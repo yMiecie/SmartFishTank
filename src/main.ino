@@ -8,14 +8,52 @@
 #include "UI/core/UIScreen.h"
 #include "UI/core/UIViewController.h"
 #include "UI/core/UILabel.h"
+#include "Sensors/Thermometer/ThermometerDS18B20.h"
+#include "Sensors/Button/Button.h"
 
 //  OLED display
 #define PIN_SDA 21
 #define PIN_SCL 22
 Display *_display;
 
+//  BUTTON pins
+#define PIN_BUTTON_WHITE  14
+#define PIN_BUTTON_YELLOW 12
+#define PIN_BUTTON_RED    13
+Button buttonWhite(PIN_BUTTON_WHITE, BUTTON_TYPE::BUTTON_TYPE_ACTIVE_HIGH);
+Button buttonYellow(PIN_BUTTON_YELLOW, BUTTON_TYPE::BUTTON_TYPE_ACTIVE_HIGH);
+Button buttonRed(PIN_BUTTON_RED, BUTTON_TYPE::BUTTON_TYPE_ACTIVE_HIGH);
+
+// Thermometer
+#define PIN_THERMOMETER  27
+ThermometerDS18B20 thermometer(PIN_THERMOMETER);
+
 // UI
 UIScreen *_screen;
+
+// Button handler
+void onButtonPressed(uint8_t pin) {
+
+  switch (pin) {
+    case PIN_BUTTON_YELLOW:
+    {
+        float temp = thermometer.temperature(1);
+        Serial.printf("[ThermometerDS18B20::temperature] Current temperature in water %.2f °C.\n", temp);
+        break;
+    }
+    case PIN_BUTTON_RED:
+    {
+      float temp = thermometer.temperature(0);
+      Serial.printf("[ThermometerDS18B20::temperature] Current temperature in air %.2f °C.\n", temp);
+      break;
+    }
+    default:
+    {
+      break;
+    }
+  }
+
+}
 
 void setup() {
   Serial.begin(115200);
@@ -34,105 +72,67 @@ void setup() {
   vc->view->addSubview(label);
 
   _screen->viewController = vc;
+
+  // button
+  buttonWhite.setHandler(&onButtonPressed, BUTTON_STATE::BUTTON_STATE_PRESSED);
+  buttonYellow.setHandler(&onButtonPressed, BUTTON_STATE::BUTTON_STATE_PRESSED);
+  buttonRed.setHandler(&onButtonPressed, BUTTON_STATE::BUTTON_STATE_PRESSED);
 }
 
-int incomingByte = 0;
-
 void loop() {
-
-  // Read data on serial
-  if (Serial.available() > 0) {
-          // read the incoming byte:
-          incomingByte = Serial.read();
-
-          // say what you got:
-          Serial.print("I received: ");
-          Serial.printf("%c\n", incomingByte);
-  }
 
   // Update UIScreen
   int remainingTimeBudget = _screen->update();
 
   if (remainingTimeBudget > 0) {
+
     // You can do some work here
     // Don't do stuff if you are below your
     // time budget.
+
+    buttonWhite.update();
+    buttonYellow.update();
+    buttonRed.update();
+
+    /*int reading = digitalRead(PIN_BUTTON_WHITE);     // On lit l'état du bouton | Button state reading
+    if (reading != buttonStateWhite) {
+      buttonStateWhite = reading;         // enregistre l'état | record the new state
+
+      if (buttonStateWhite == HIGH) {
+        Serial.print("ButtonWhite: ON\n");
+      } else {
+          Serial.print("ButtonWhite: OFF\n");
+      }
+    }
+
+    reading = digitalRead(PIN_BUTTON_YELLOW);     // On lit l'état du bouton | Button state reading
+    if (reading != buttonStateYellow) {
+      buttonStateYellow = reading;         // enregistre l'état | record the new state
+
+      if (buttonStateYellow == HIGH) {
+        Serial.print("ButtonYellow: ON\n");
+
+        float temp = thermometer.temperature(0);
+        Serial.printf("[ThermometerDS18B20::temperature] Current temperature in air %.2f °C.\n", temp);
+
+      } else {
+          Serial.print("ButtonYellow: OFF\n");
+      }
+    }
+
+    reading = digitalRead(PIN_BUTTON_RED);     // On lit l'état du bouton | Button state reading
+    if (reading != buttonStateRed) {
+      buttonStateRed = reading;         // enregistre l'état | record the new state
+
+      if (buttonStateRed == HIGH) {
+        Serial.print("ButtonRed: ON\n");
+
+
+      } else {
+          Serial.print("ButtonRed: OFF\n");
+      }
+    }*/
+
     delay(remainingTimeBudget);
   }
-
 }
-
-/*#include <Wire.h>  // Only needed for Arduino 1.6.5 and earlier
-#include "SSD1306.h" // alias for `#include "SSD1306Wire.h"`
-#include "OLEDDisplayUi.h" // Include the UI lib
-
-//  OLED display
-// 21 -> SDA
-// 22 -> SCL
-
-// Initialize the OLED display using Wire library
-SSD1306  display(0x3c, 21, 22);
-
-// Include custom images
-#include "images.h"
-
-#define DEMO_DURATION 3000
-typedef void (*Demo)(void);
-
-int demoMode = 0;
-int counter = 1;
-
-void setup() {
-  Serial.begin(115200);
-  Serial.println();
-  Serial.println();
-
-
-  // Initialising the UI will init the display too.
-  display.init();
-
-  display.flipScreenVertically();
-  display.setFont(ArialMT_Plain_10);
-
-}
-
-void drawHeaderDemo() {
-    // see http://blog.squix.org/2015/05/esp8266-nodemcu-how-to-create-xbm.html
-    // on how to create xbm files
-    display.drawXbm(0, 0, CO2_Icon_Small_width, CO2_Icon_Small_height, CO2_Icon_Small_bits);
-    display.setTextAlignment(TEXT_ALIGN_LEFT);
-    display.drawString(14,0, "7.4pH");
-
-    display.drawXbm(45, 0, Temperature_Icon_Small_width, Temperature_Icon_Small_height, Temperature_Icon_bits);
-    display.setTextAlignment(TEXT_ALIGN_LEFT);
-    display.drawString(55,0, "28°C");
-
-    display.setTextAlignment(TEXT_ALIGN_LEFT);
-    display.drawString(85,0, "15:47");
-
-    display.drawXbm(114, 0, Wifi_Icon_Small_width, Wifi_Icon_Small_height, Wifi_Icon_bits);
-}
-
-Demo demos[] = {drawHeaderDemo};
-int demoLength = (sizeof(demos) / sizeof(Demo));
-long timeSinceLastModeSwitch = 0;
-
-void loop() {
-  // clear the display
-  display.clear();
-  // draw the current demo method
-  demos[demoMode]();
-
-  display.setTextAlignment(TEXT_ALIGN_RIGHT);
-  display.drawString(10, 128, String(millis()));
-  // write the buffer to the display
-  display.display();
-
-  if (millis() - timeSinceLastModeSwitch > DEMO_DURATION) {
-    demoMode = (demoMode + 1)  % demoLength;
-    timeSinceLastModeSwitch = millis();
-  }
-  counter++;
-  delay(10);
-}
-*/

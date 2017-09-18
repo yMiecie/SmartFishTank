@@ -19,14 +19,13 @@ public:
   ThermometerDS18B20(uint8_t pin);
   virtual ~ThermometerDS18B20();
   virtual float temperature();
+  float temperature(uint8_t device);
 
 protected:
   uint8_t m_pin;
 
 private:
-  OneWire *oneWire;
-  DallasTemperature *sensors;
-
+  DallasTemperature m_sensors;
 };
 
 #endif

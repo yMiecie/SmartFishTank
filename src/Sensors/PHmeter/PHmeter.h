@@ -12,7 +12,6 @@
 class PHmeter
 {
     public:
-    virtual ~PHmeter();
     virtual float pH() = 0;
 
     protected:
