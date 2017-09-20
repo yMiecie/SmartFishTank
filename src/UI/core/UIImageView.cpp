@@ -9,6 +9,7 @@
   UIImageView::UIImageView(UIImage *image)
   : UIView(UIFrameMake(UIPointZero(), image->size)), m_image(image)
   {
+    this->type = "UIImageView";
   }
 
   UIImageView::~UIImageView()

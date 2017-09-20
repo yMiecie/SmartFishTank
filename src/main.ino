@@ -4,8 +4,10 @@
 /* P-Name:  Smart Fish Tank */
 /****************************/
 
+#include <sstream>
 #include "Display/DisplaySSD1306.h"
 #include "UI/core/UIScreen.h"
+#include "UI/core/UINavigationViewController.h"
 #include "UI/core/UIViewController.h"
 #include "UI/core/UILabel.h"
 #include "Sensors/Thermometer/ThermometerDS18B20.h"
@@ -29,22 +31,39 @@ Button buttonRed(PIN_BUTTON_RED, BUTTON_TYPE::BUTTON_TYPE_ACTIVE_HIGH);
 ThermometerDS18B20 thermometer(PIN_THERMOMETER);
 
 // UI
-UIScreen *_screen;
+UIScreen                    *_screen;
+UINavigationViewController  *_nc;
+
+#define SSTR( x ) static_cast< std::ostringstream & >( \
+        ( std::ostringstream() << std::dec << x ) ).str()
 
 // Button handler
 void onButtonPressed(uint8_t pin) {
 
   switch (pin) {
+    case PIN_BUTTON_WHITE:
+    {
+      _nc->popToRootViewController(false);
+      break;
+    }
     case PIN_BUTTON_YELLOW:
     {
-        float temp = thermometer.temperature(1);
-        Serial.printf("[ThermometerDS18B20::temperature] Current temperature in water %.2f °C.\n", temp);
+        _nc->popViewController(false);
+        //float temp = thermometer.temperature(1);
+        //Serial.printf("[ThermometerDS18B20::temperature] Current temperature in water %.2f °C.\n", temp);
         break;
     }
     case PIN_BUTTON_RED:
     {
-      float temp = thermometer.temperature(0);
-      Serial.printf("[ThermometerDS18B20::temperature] Current temperature in air %.2f °C.\n", temp);
+        std::stringstream ss;
+        ss << "YOLO " << _nc->viewControllers.size();
+        String text = String(ss.str().c_str());
+        UILabel *label = new UILabel(text);
+        UIViewController* vc = new UIViewController();
+        vc->view->addSubview(label);
+        _nc->pushViewController(vc, false);
+      //float temp = thermometer.temperature(0);
+      //Serial.printf("[ThermometerDS18B20::temperature] Current temperature in air %.2f °C.\n", temp);
       break;
     }
     default:
@@ -66,12 +85,12 @@ void setup() {
   // UI
   _screen = new UIScreen(_display);
 
-  UILabel *label = new UILabel("YOLO");
-
-  UIViewController* vc = new UIViewController();
+  UILabel *label = new UILabel("YOLO 0");
+  UIViewController *vc = new UIViewController();
   vc->view->addSubview(label);
+  _nc = new UINavigationViewController(vc);
 
-  _screen->viewController = vc;
+  _screen->viewController = _nc;
 
   // button
   buttonWhite.setHandler(&onButtonPressed, BUTTON_STATE::BUTTON_STATE_PRESSED);
@@ -89,49 +108,9 @@ void loop() {
     // You can do some work here
     // Don't do stuff if you are below your
     // time budget.
-
     buttonWhite.update();
     buttonYellow.update();
     buttonRed.update();
-
-    /*int reading = digitalRead(PIN_BUTTON_WHITE);     // On lit l'état du bouton | Button state reading
-    if (reading != buttonStateWhite) {
-      buttonStateWhite = reading;         // enregistre l'état | record the new state
-
-      if (buttonStateWhite == HIGH) {
-        Serial.print("ButtonWhite: ON\n");
-      } else {
-          Serial.print("ButtonWhite: OFF\n");
-      }
-    }
-
-    reading = digitalRead(PIN_BUTTON_YELLOW);     // On lit l'état du bouton | Button state reading
-    if (reading != buttonStateYellow) {
-      buttonStateYellow = reading;         // enregistre l'état | record the new state
-
-      if (buttonStateYellow == HIGH) {
-        Serial.print("ButtonYellow: ON\n");
-
-        float temp = thermometer.temperature(0);
-        Serial.printf("[ThermometerDS18B20::temperature] Current temperature in air %.2f °C.\n", temp);
-
-      } else {
-          Serial.print("ButtonYellow: OFF\n");
-      }
-    }
-
-    reading = digitalRead(PIN_BUTTON_RED);     // On lit l'état du bouton | Button state reading
-    if (reading != buttonStateRed) {
-      buttonStateRed = reading;         // enregistre l'état | record the new state
-
-      if (buttonStateRed == HIGH) {
-        Serial.print("ButtonRed: ON\n");
-
-
-      } else {
-          Serial.print("ButtonRed: OFF\n");
-      }
-    }*/
 
     delay(remainingTimeBudget);
   }

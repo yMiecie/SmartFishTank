@@ -5,13 +5,14 @@
 /****************************/
 
 #include "UIView.h"
+#include <algorithm>
 
   UIView::UIView()
   :UIView(UIFrameZero())
   {}
 
   UIView::UIView(UIFrame frame)
-  :frame(frame), type("UIView"), hiden(false)
+  :frame(frame), type("UIView"), hiden(false), superView(NULL)
   {}
 
   UIView::~UIView()
@@ -38,6 +39,11 @@
     subviews.push_back(subview);
   }
 
+  void UIView::removeFromSuperView() {
+    superView->subviews.erase(std::remove(superView->subviews.begin(), superView->subviews.end(), this), superView->subviews.end());
+    superView = NULL;
+  }
+
   void UIView::draw(Display* display) {
 
     if (hiden) {
@@ -46,6 +52,10 @@
 
     for(int i(0); i<subviews.size(); ++i)
     {
+      UIView *subview = subviews[i];
+
+      if (subview != NULL) {
        subviews[i]->draw(display);
+      }
     }
   }

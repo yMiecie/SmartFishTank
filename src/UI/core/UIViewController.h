@@ -31,6 +31,7 @@ protected:
   UIScreen* m_screen;
 
   friend class UIScreen;
+  friend class UINavigationViewController;
 
 private:
   void loadView();

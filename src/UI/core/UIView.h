@@ -48,6 +48,7 @@ public:
   UIView* superView;
   std::vector<UIView*> subviews;
   void addSubview(UIView* subview);
+  void removeFromSuperView();
 
   String type;
 

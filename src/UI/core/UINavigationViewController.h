@@ -33,7 +33,7 @@ protected:
 
 private:
   void loadView();
-  void show(UIViewController* viewController, bool animated);
+  void show(UIViewController* viewController, bool animated, bool useRightAnimation);
 };
 
 #endif
