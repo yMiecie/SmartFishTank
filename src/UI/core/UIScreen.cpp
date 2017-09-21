@@ -15,26 +15,30 @@ UIScreen::UIScreen(Display *display)
 UIScreen::~UIScreen()
 {}
 
-void UIScreen::setTargetFPS(uint8_t fps) {
-  float oldInterval = m_updateInterval;
-  m_updateInterval = ((float) 1.0 / (float) fps) * 1000;
+Display *UIScreen::display() const {
+  return m_display;
+}
 
-  // Calculate new ticksPerFrame
-  float changeRatio = oldInterval / (float) m_updateInterval;
-  m_ticksPerFrame *= changeRatio;
+void UIScreen::setTargetFPS(uint8_t fps) {
+  m_updateInterval = ((float) 1.0 / (float) fps) * 1000;
 }
 
 int8_t UIScreen::update(){
   long frameStart = millis();
-  int8_t timeBudget = m_updateInterval - (frameStart - m_state.lastUpdate);
+  int8_t timeBudget = m_updateInterval - (frameStart - m_lastUpdate);
   if ( timeBudget <= 0) {
-    // Implement frame skipping to ensure time budget is keept
-    if (m_state.lastUpdate != 0) m_state.ticksSinceLastStateSwitch += ceil(-timeBudget / m_updateInterval);
-
-    m_state.lastUpdate = frameStart;
+    m_lastUpdate = frameStart;
     draw();
   }
   return m_updateInterval - (millis() - frameStart);
+}
+
+uint64_t UIScreen::lastUpdate() {
+  return m_lastUpdate;
+}
+
+uint8_t UIScreen::updateInterval() {
+  return m_updateInterval;
 }
 
 void UIScreen::draw() {
@@ -57,7 +61,9 @@ void UIScreen::draw() {
       viewController->viewDidLoad();
       viewController->viewWillAppear();
       if (viewController->view != NULL) {
-        viewController->view->draw(m_display);
+        viewController->viewWillUpdate();
+        viewController->view->draw(this);
+        viewController->viewDidUpdate();
       }
       m_display->display();
       viewController->viewDidAppear();
@@ -67,7 +73,9 @@ void UIScreen::draw() {
     // update current display
     m_display->clear();
     if (viewController != NULL && viewController->view != NULL) {
-      viewController->view->draw(m_display);
+      viewController->viewWillUpdate();
+      viewController->view->draw(this);
+      viewController->viewDidUpdate();
     }
     m_display->display();
   }

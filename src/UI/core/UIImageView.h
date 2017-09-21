@@ -18,7 +18,7 @@ public:
 
   void setImage(UIImage *image);
 
-  virtual void draw(Display* display);
+  virtual void draw(UIScreen *screen);
 
 protected:
   UIImage *m_image;

@@ -12,6 +12,14 @@
 
 #include "UIViewController.h"
 
+enum class UINAVIGATION_ANIMATION {
+  NO_ANIMATION      = 0,
+  ANIME_FROM_RIGHT,
+  ANIME_FROM_LEFT,
+  ANIME_FROM_BOTTOM,
+  ANIME_FROM_TOP
+};
+
 class UINavigationViewController: public UIViewController {
 public:
   UINavigationViewController(UIViewController* rootViewController);
@@ -21,8 +29,11 @@ public:
   UIViewController* currentViewController;
   std::vector<UIViewController*> viewControllers;
   void pushViewController(UIViewController* viewController, boolean animated);
+  void pushViewController(UIViewController* viewController, UINAVIGATION_ANIMATION animation);
   void popViewController(boolean animated);
+  void popViewController(UINAVIGATION_ANIMATION animation);
   void popToRootViewController(boolean animated);
+  void popToRootViewController(UINAVIGATION_ANIMATION animation);
 
 protected:
   virtual void viewDidLoad();
@@ -30,10 +41,12 @@ protected:
   virtual void viewDidAppear();
   virtual void viewWillDesappear();
   virtual void viewDidDesappear();
+  virtual void viewWillUpdate();
+  virtual void viewDidUpdate();
 
 private:
   void loadView();
-  void show(UIViewController* viewController, bool animated, bool useRightAnimation);
+  void show(UIViewController* viewController, UINAVIGATION_ANIMATION animation);
 };
 
 #endif

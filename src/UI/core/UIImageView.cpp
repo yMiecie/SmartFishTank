@@ -15,8 +15,8 @@
   UIImageView::~UIImageView()
   {}
 
-  void UIImageView::draw(Display* display) {
-    UIView::draw(display);
+  void UIImageView::draw(UIScreen* screen) {
+    UIView::draw(screen);
 
     if (this->hiden) {
       return ;
@@ -24,5 +24,5 @@
 
     UIPoint origin = this->getScreenOrigin();
 
-    display->drawXbm(origin.x, origin.y, m_image->size.width, m_image->size.height, m_image->xbm);
+    screen->display()->drawXbm(origin.x, origin.y, m_image->size.width, m_image->size.height, m_image->xbm);
   }

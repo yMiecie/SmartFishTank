@@ -27,7 +27,7 @@ public:
   const char *fontData;
   UITEXT_ALIGNMENT textAlignment;
 
-  virtual void draw(Display* display);
+  virtual void draw(UIScreen *screen);
 };
 
 #endif

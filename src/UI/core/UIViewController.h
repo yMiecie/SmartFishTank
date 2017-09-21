@@ -19,14 +19,14 @@ public:
 
   UIView* view;
 
-  void loop();
-
 protected:
   virtual void viewDidLoad();
   virtual void viewWillAppear();
   virtual void viewDidAppear();
   virtual void viewWillDesappear();
   virtual void viewDidDesappear();
+  virtual void viewWillUpdate();
+  virtual void viewDidUpdate();
 
   UIScreen* m_screen;
 

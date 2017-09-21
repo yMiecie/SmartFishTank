@@ -19,8 +19,8 @@
   UILabel::~UILabel()
   {}
 
-  void UILabel::draw(Display* display) {
-    UIView::draw(display);
+  void UILabel::draw(UIScreen* screen) {
+    UIView::draw(screen);
 
     if (this->hiden) {
       return ;
@@ -29,9 +29,9 @@
     UIPoint origin = this->getScreenOrigin();
 
     if (fontData != nullptr)
-      display->setFont(fontData);
+      screen->display()->setFont(fontData);
     if (fontData != NULL)
-      display->setTextAlignment((DISPLAY_TEXT_ALIGNMENT)textAlignment);
+      screen->display()->setTextAlignment((DISPLAY_TEXT_ALIGNMENT)textAlignment);
 
-    display->drawString(origin.x, origin.y, text);
+    screen->display()->drawString(origin.x, origin.y, text);
   }

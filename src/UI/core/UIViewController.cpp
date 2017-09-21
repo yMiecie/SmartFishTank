@@ -35,6 +35,8 @@ void UIViewController::viewWillDesappear() {
 void UIViewController::viewDidDesappear() {
 }
 
-void UIViewController::loop() {
+void UIViewController::viewWillUpdate() {
+}
 
+void UIViewController::viewDidUpdate() {
 }

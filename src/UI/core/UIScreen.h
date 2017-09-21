@@ -16,25 +16,6 @@ enum FrameState {
   FIXED
 };
 
-// Structure of the UiState
-struct DisplayUiState {
-  uint64_t     lastUpdate                = 0;
-  uint16_t      ticksSinceLastStateSwitch = 0;
-
-  FrameState    frameState                = FIXED;
-  uint8_t       currentFrame              = 0;
-
-  bool          isIndicatorDrawen         = true;
-
-  // Normal = 1, Inverse = -1;
-  int8_t        frameTransitionDirection  = 1;
-
-  bool          manuelControll            = false;
-
-  // Custom data that can be used by the user
-  void*         userData                  = NULL;
-};
-
 class UIScreen {
 public:
   UIScreen(Display *display);
@@ -48,14 +29,19 @@ public:
   // Update screen & return remaining time
   int8_t update();
 
+  // Time from last update in ms
+  uint64_t lastUpdate();
+  uint8_t  updateInterval();
+
+  Display *display() const;
+
 private:
   Display           *m_display;
-  DisplayUiState     m_state;
   UIViewController  *m_displayedViewController;
 
   // Bookeeping for update
-  uint8_t             m_updateInterval      = 33;
-  uint16_t            m_ticksPerFrame       = 151; // ~ 5000ms at 30 FPS
+  uint8_t             m_updateInterval      = 33; // ±30fps
+  uint64_t            m_lastUpdate          = 0;
 
   void draw();
 };

@@ -62,6 +62,11 @@ void onButtonPressed(uint8_t pin) {
         UIViewController* vc = new UIViewController();
         vc->view->addSubview(label);
         _nc->pushViewController(vc, false);
+
+        vc->view->animate(1, 1, [label](float progress) {
+          label->frame.origin.x = 90 * progress;
+        });
+
       //float temp = thermometer.temperature(0);
       //Serial.printf("[ThermometerDS18B20::temperature] Current temperature in air %.2f °C.\n", temp);
       break;
