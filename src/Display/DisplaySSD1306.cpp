@@ -15,6 +15,16 @@ DisplaySSD1306::DisplaySSD1306(uint8_t sda, uint8_t scl)
 DisplaySSD1306::~DisplaySSD1306()
 {}
 
+/*******************/
+/* Size functions  */
+/*******************/
+int DisplaySSD1306::width() {
+  return 128;
+}
+
+int DisplaySSD1306::height() {
+  return 64;
+}
 
 /*******************/
 /* Image functions */

@@ -43,12 +43,12 @@ void onButtonPressed(uint8_t pin) {
   switch (pin) {
     case PIN_BUTTON_WHITE:
     {
-      _nc->popToRootViewController(false);
+      _nc->popToRootViewController(true);
       break;
     }
     case PIN_BUTTON_YELLOW:
     {
-        _nc->popViewController(false);
+        _nc->popViewController(true);
         //float temp = thermometer.temperature(1);
         //Serial.printf("[ThermometerDS18B20::temperature] Current temperature in water %.2f °C.\n", temp);
         break;
@@ -61,12 +61,7 @@ void onButtonPressed(uint8_t pin) {
         UILabel *label = new UILabel(text);
         UIViewController* vc = new UIViewController();
         vc->view->addSubview(label);
-        _nc->pushViewController(vc, false);
-
-        vc->view->animate(1, 1, [label](float progress) {
-          label->frame.origin.x = 90 * progress;
-        });
-
+        _nc->pushViewController(vc, true);
       //float temp = thermometer.temperature(0);
       //Serial.printf("[ThermometerDS18B20::temperature] Current temperature in air %.2f °C.\n", temp);
       break;
@@ -94,6 +89,7 @@ void setup() {
   UIViewController *vc = new UIViewController();
   vc->view->addSubview(label);
   _nc = new UINavigationViewController(vc);
+  _nc->view->frame.size = _screen->size();
 
   _screen->viewController = _nc;
 

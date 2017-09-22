@@ -16,6 +16,8 @@ enum FrameState {
   FIXED
 };
 
+class UISize;
+
 class UIScreen {
 public:
   UIScreen(Display *display);
@@ -30,10 +32,12 @@ public:
   int8_t update();
 
   // Time from last update in ms
-  uint64_t lastUpdate();
-  uint8_t  updateInterval();
+  uint64_t  lastUpdate();
+  uint8_t   updateInterval();
 
-  Display *display() const;
+  Display   *display() const;
+
+  UISize    size();
 
 private:
   Display           *m_display;

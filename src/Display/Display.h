@@ -18,6 +18,13 @@ enum class DISPLAY_TEXT_ALIGNMENT {
 
 class Display {
 public:
+
+  /*******************/
+  /* Size functions */
+  /*******************/
+  virtual int width() = 0;
+  virtual int height() = 0;
+
   /*******************/
   /* Image functions */
   /*******************/

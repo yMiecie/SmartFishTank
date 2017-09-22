@@ -19,6 +19,10 @@ Display *UIScreen::display() const {
   return m_display;
 }
 
+UISize UIScreen::size() {
+  return UISizeMake(m_display->width(), m_display->height());
+}
+
 void UIScreen::setTargetFPS(uint8_t fps) {
   m_updateInterval = ((float) 1.0 / (float) fps) * 1000;
 }

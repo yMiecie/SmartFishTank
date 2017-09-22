@@ -16,6 +16,10 @@ public:
   DisplaySSD1306(uint8_t sda, uint8_t scl);
   virtual ~DisplaySSD1306();
 
+  // Size
+  virtual int width();
+  virtual int height();
+
   // Image functions
   virtual void drawXbm(int16_t x, int16_t y, int16_t width, int16_t height, const char *xbm);
 

@@ -108,8 +108,9 @@ void UINavigationViewController::popToRootViewController(UINAVIGATION_ANIMATION 
 
 void UINavigationViewController::show(UIViewController* viewController, UINAVIGATION_ANIMATION animation) {
 
-  if (animation == UINAVIGATION_ANIMATION::NO_ANIMATION) {
+  viewController->view->frame = view->getBounds();
 
+  if (animation == UINAVIGATION_ANIMATION::NO_ANIMATION) {
     if (currentViewController != NULL) {
       currentViewController->viewWillDesappear();
       currentViewController->view->removeFromSuperView();
@@ -118,6 +119,74 @@ void UINavigationViewController::show(UIViewController* viewController, UINAVIGA
 
     viewController->viewDidLoad();
     view->addSubview(viewController->view);
+    viewController->viewWillAppear();
     currentViewController = viewController;
+    viewController->viewDidAppear();
+  } else {
+    std::function< void (bool)> completion = [viewController, this](bool finished) {
+      if (this->currentViewController != NULL) {
+        this->currentViewController->viewWillDesappear();
+        this->currentViewController->view->removeFromSuperView();
+        this->currentViewController->viewDidDesappear();
+      }
+      this->currentViewController = viewController;
+      viewController->viewDidAppear();
+    };
+
+    viewController->viewDidLoad();
+    view->addSubview(viewController->view);
+    viewController->viewWillAppear();
+    switch (animation) {
+      case UINAVIGATION_ANIMATION::ANIME_FROM_RIGHT : {
+        view->animate(0.3,
+                      [viewController, this](float progress) {
+                        float width = (float)this->view->frame.size.width;
+                        viewController->view->frame.origin.x = (int16_t)(width * (1.0f - progress));
+                        if (this->currentViewController != NULL) {
+                          this->currentViewController->view->frame.origin.x = (int16_t)(-width * progress);
+                        }
+                      },
+                      completion);
+        break;
+      }
+      case UINAVIGATION_ANIMATION::ANIME_FROM_LEFT : {
+          view->animate(0.3,
+                        [viewController, this](float progress) {
+                          float width = (float)this->view->frame.size.width;
+                          viewController->view->frame.origin.x = (int16_t)(-width * (1.0f - progress));
+                          if (this->currentViewController != NULL) {
+                            this->currentViewController->view->frame.origin.x = (int16_t)(width * progress);
+                          }
+                        },
+                        completion);
+          break;
+      }
+      case UINAVIGATION_ANIMATION::ANIME_FROM_BOTTOM : {
+          view->animate(0.3,
+                        [viewController, this](float progress) {
+                          float height = (float)this->view->frame.size.height;
+                          viewController->view->frame.origin.y = (int16_t)(height * (1.0f - progress));
+                          if (this->currentViewController != NULL) {
+                            this->currentViewController->view->frame.origin.y = (int16_t)(-height * progress);
+                          }
+                        },
+                        completion);
+          break;
+      }
+      case UINAVIGATION_ANIMATION::ANIME_FROM_TOP : {
+            view->animate(0.3,
+                          [viewController, this](float progress) {
+                            float height = (float)this->view->frame.size.height;
+                            viewController->view->frame.origin.y = (int16_t)(-height * (1.0f - progress));
+                            if (this->currentViewController != NULL) {
+                              this->currentViewController->view->frame.origin.y = (int16_t)(height * progress);
+                            }
+                          },
+                          completion);
+            break;
+      }
+    }
+
+
   }
 }
