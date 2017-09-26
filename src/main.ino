@@ -5,13 +5,10 @@
 /****************************/
 
 #include <sstream>
-#include "Display/DisplaySSD1306.h"
-#include "UI/core/UIScreen.h"
-#include "UI/core/UINavigationViewController.h"
-#include "UI/core/UIViewController.h"
-#include "UI/core/UILabel.h"
-#include "Sensors/Thermometer/ThermometerDS18B20.h"
-#include "Sensors/Button/Button.h"
+#include "images.h"
+#include <DisplaySSD1306.h>
+#include <UIKit.h>
+#include <Sensors.h>
 
 //  OLED display
 #define PIN_SDA 21
@@ -55,12 +52,55 @@ void onButtonPressed(uint8_t pin) {
     }
     case PIN_BUTTON_RED:
     {
-        std::stringstream ss;
-        ss << "YOLO " << _nc->viewControllers.size();
-        String text = String(ss.str().c_str());
-        UILabel *label = new UILabel(text);
+
         UIViewController* vc = new UIViewController();
-        vc->view->addSubview(label);
+
+        int size = _nc->viewControllers.size();
+        std::stringstream ss;
+        ss << "ViewController " << size;
+        String text = String(ss.str().c_str());
+        UILabel *label01 = new UILabel(text);
+        label01->frame.origin.y = 15;
+        vc->view->addSubview(label01);
+
+        if (size == 1) {
+          UILabel *label02 = new UILabel("Air temperature: 18°C");
+          label02->frame.origin.x = 20;
+          label02->frame.origin.y = 30;
+          vc->view->addSubview(label02);
+
+          UISize size = UISizeMake(Temperature_Icon_Small_width, Temperature_Icon_Small_height);
+          UIImage *image = new UIImage(size, Temperature_Icon_bits);
+          UIImageView *imageView = new UIImageView(image);
+          imageView->frame.origin.y = 30;
+          vc->view->addSubview(imageView);
+
+        } else if (size == 2) {
+          UILabel *label02 = new UILabel("Water temperature: 16°C");
+          label02->frame.origin.x = 20;
+          label02->frame.origin.y = 30;
+          vc->view->addSubview(label02);
+
+          UISize size = UISizeMake(Temperature_Icon_Small_width, Temperature_Icon_Small_height);
+          UIImage *image = new UIImage(size, Temperature_Icon_bits);
+          UIImageView *imageView = new UIImageView(image);
+          imageView->frame.origin.y = 30;
+          vc->view->addSubview(imageView);
+
+        } else if (size == 3) {
+          UILabel *label02 = new UILabel("pH: ???");
+          label02->frame.origin.x = 20;
+          label02->frame.origin.y = 30;
+          vc->view->addSubview(label02);
+
+          UISize size = UISizeMake(CO2_Icon_Small_width, CO2_Icon_Small_height);
+          UIImage *image = new UIImage(size, CO2_Icon_Small_bits);
+          UIImageView *imageView = new UIImageView(image);
+          imageView->frame.origin.y = 30;
+          vc->view->addSubview(imageView);
+
+        }
+
         _nc->pushViewController(vc, true);
       //float temp = thermometer.temperature(0);
       //Serial.printf("[ThermometerDS18B20::temperature] Current temperature in air %.2f °C.\n", temp);
@@ -85,11 +125,17 @@ void setup() {
   // UI
   _screen = new UIScreen(_display);
 
-  UILabel *label = new UILabel("YOLO 0");
+  UILabel *navLabel = new UILabel("Main NavigationController");
   UIViewController *vc = new UIViewController();
-  vc->view->addSubview(label);
+  UILabel *label01 = new UILabel("ViewController 0");
+  label01->frame.origin.y = 15;
+  vc->view->addSubview(label01);
+  UILabel *label02 = new UILabel("Hello World !");
+  label02->frame.origin.y = 30;
+  vc->view->addSubview(label02);
   _nc = new UINavigationViewController(vc);
   _nc->view->frame.size = _screen->size();
+  _nc->view->addSubview(navLabel);
 
   _screen->viewController = _nc;
 
