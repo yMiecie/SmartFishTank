@@ -21,7 +21,7 @@ class UILabel: public UIView {
 public:
   UILabel();
   UILabel(String text);
-  ~UILabel();
+  virtual ~UILabel();
 
   String text;
   const char *fontData;

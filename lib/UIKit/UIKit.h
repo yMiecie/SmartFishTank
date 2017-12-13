@@ -13,6 +13,7 @@
 #include "UIImage.h"
 #include "UIImageView.h"
 #include "UILabel.h"
+#include "UILine.h"
 #include "UINavigationViewController.h"
 #include "UIPagerViewController.h"
 #include "UIViewController.h"

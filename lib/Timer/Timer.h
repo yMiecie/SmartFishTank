@@ -52,10 +52,10 @@ public:
   Timer(unsigned long interval, std::function< void (Timer*)> handler, bool repeats);
 
 	// Set the desired interval for calls, and update _cached_next_run
-	virtual void setInterval(unsigned long _interval);
+	virtual void setInterval(unsigned long interval);
 
 	// Should be run once
-	virtual void setRepeats(bool _repeats);
+	virtual void setRepeats(bool repeats);
 
 	// Return if the Thread should be runned or not
 	virtual bool shouldRun(unsigned long time);

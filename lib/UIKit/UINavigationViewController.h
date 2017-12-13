@@ -22,18 +22,22 @@ enum class UINAVIGATION_ANIMATION {
 
 class UINavigationViewController: public UIViewController {
 public:
+  UINavigationViewController();
   UINavigationViewController(UIViewController* rootViewController);
-  ~UINavigationViewController();
+  virtual ~UINavigationViewController();
 
-  UIViewController* rootViewController;
-  UIViewController* currentViewController;
-  std::vector<UIViewController*> viewControllers;
-  void pushViewController(UIViewController* viewController, boolean animated);
-  void pushViewController(UIViewController* viewController, UINAVIGATION_ANIMATION animation);
-  void popViewController(boolean animated);
-  void popViewController(UINAVIGATION_ANIMATION animation);
-  void popToRootViewController(boolean animated);
-  void popToRootViewController(UINAVIGATION_ANIMATION animation);
+  UIView *header;
+  UIView *footer;
+
+  UIViewController* rootViewController();
+  UIViewController* currentViewController();
+  std::vector<UIViewController*> viewControllers();
+  virtual void pushViewController(UIViewController* viewController, boolean animated);
+  virtual void pushViewController(UIViewController* viewController, UINAVIGATION_ANIMATION animation);
+  virtual void popViewController(boolean animated);
+  virtual void popViewController(UINAVIGATION_ANIMATION animation);
+  virtual void popToRootViewController(boolean animated);
+  virtual void popToRootViewController(UINAVIGATION_ANIMATION animation);
 
 protected:
   virtual void viewDidLoad();
@@ -44,9 +48,12 @@ protected:
   virtual void viewWillUpdate();
   virtual void viewDidUpdate();
 
+  UIViewController* m_rootViewController;
+  UIViewController* m_currentViewController;
+  std::vector<UIViewController*> m_viewControllers;
+
 private:
-  void loadView();
-  void show(UIViewController* viewController, UINAVIGATION_ANIMATION animation);
+  virtual void show(UIViewController* viewController, UINAVIGATION_ANIMATION animation);
 };
 
 #endif

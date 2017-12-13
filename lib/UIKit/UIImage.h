@@ -14,7 +14,7 @@ class UIImage {
 public:
   UIImage();
   UIImage(UISize size, const char *xbm);
-  ~UIImage();
+  virtual ~UIImage();
 
   const char  *xbm;
   UISize      size;

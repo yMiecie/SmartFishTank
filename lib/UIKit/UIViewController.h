@@ -11,13 +11,29 @@
 
 class UIScreen;
 class UIView;
+class UINavigationViewController;
+class UIPagerViewController;
 
 class UIViewController {
-public:
-  UIViewController();
-  ~UIViewController();
 
+public:
+
+  enum UIViewControllerStatus {
+    notLoaded = 0,
+    didLoaded,
+    willAppear,
+    didAppear,
+    willDesappear,
+    desappear
+  };
+
+  UIViewController();
+  virtual ~UIViewController();
+
+  String  tag;
   UIView* view;
+  UINavigationViewController* navigationController;
+  UIPagerViewController*      pagerController;
 
 protected:
   virtual void viewDidLoad();
@@ -28,13 +44,12 @@ protected:
   virtual void viewWillUpdate();
   virtual void viewDidUpdate();
 
-  UIScreen* m_screen;
+  UIScreen                  *m_screen;
+  UIViewControllerStatus    m_viewStatus;
 
   friend class UIScreen;
   friend class UINavigationViewController;
-
-private:
-  void loadView();
+  friend class UIPagerViewController;
 };
 
 #endif

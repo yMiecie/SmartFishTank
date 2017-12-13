@@ -25,6 +25,36 @@ public:
   virtual int width() = 0;
   virtual int height() = 0;
 
+  /*********************/
+  /* Draw functions */
+  /*********************/
+  // Draw a pixel at given position
+  virtual void setPixel(int16_t x, int16_t y) = 0;
+
+  // Draw a line from position 0 to position 1
+  virtual void drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1) = 0;
+
+  // Draw the border of a rectangle at the given location
+  virtual void drawRect(int16_t x, int16_t y, int16_t width, int16_t height) = 0;
+
+  // Fill the rectangle
+  virtual void fillRect(int16_t x, int16_t y, int16_t width, int16_t height) = 0;
+
+  // Draw the border of a circle
+  virtual void drawCircle(int16_t x, int16_t y, int16_t radius) = 0;
+
+  // Draw all Quadrants specified in the quads bit mask
+  virtual void drawCircleQuads(int16_t x0, int16_t y0, int16_t radius, uint8_t quads) = 0;
+
+  // Fill circle
+  virtual void fillCircle(int16_t x, int16_t y, int16_t radius) = 0;
+
+  // Draw a line horizontally
+  virtual void drawHorizontalLine(int16_t x, int16_t y, int16_t length) = 0;
+
+  // Draw a lin vertically
+  virtual void drawVerticalLine(int16_t x, int16_t y, int16_t length) = 0;
+
   /*******************/
   /* Image functions */
   /*******************/
@@ -54,6 +84,15 @@ public:
   /*********************/
   /* Display functions */
   /*********************/
+  // Turn the display upside down
+  virtual void flipScreenVertically() = 0;
+
+  // Inverted display mode
+  virtual void invertDisplay(void) = 0;
+
+  // Normal display mode
+  virtual void normalDisplay(void) = 0;
+
   // Turn the display on
   virtual void displayOn(void) = 0;
 

@@ -15,6 +15,11 @@
   UIImageView::~UIImageView()
   {}
 
+  void UIImageView::setImage(UIImage *image) {
+    m_image = image;
+    frame.size = m_image->size;
+  }
+
   void UIImageView::draw(UIScreen* screen) {
     UIView::draw(screen);
 

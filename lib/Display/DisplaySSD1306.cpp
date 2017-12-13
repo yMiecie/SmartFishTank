@@ -53,10 +53,60 @@ void DisplaySSD1306::setFont(const char *fontData) {
   m_display.setFont(fontData);
 }
 
+/*********************/
+/* Draw functions    */
+/*********************/
+void DisplaySSD1306::setPixel(int16_t x, int16_t y) {
+  m_display.setPixel(x, y);
+}
+
+void DisplaySSD1306::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
+  m_display.drawLine(x0, y0, x1, y1);
+}
+
+void DisplaySSD1306::drawRect(int16_t x, int16_t y, int16_t width, int16_t height) {
+  m_display.drawRect(x, y, width, height);
+}
+
+void DisplaySSD1306::fillRect(int16_t x, int16_t y, int16_t width, int16_t height) {
+  m_display.fillRect(x, y, width, height);
+}
+
+void DisplaySSD1306::drawCircle(int16_t x, int16_t y, int16_t radius) {
+  m_display.drawCircle(x, y, radius);
+}
+
+void DisplaySSD1306::drawCircleQuads(int16_t x0, int16_t y0, int16_t radius, uint8_t quads) {
+  m_display.drawCircleQuads(x0, y0, radius, quads);
+}
+
+void DisplaySSD1306::fillCircle(int16_t x, int16_t y, int16_t radius) {
+  m_display.fillCircle(x, y, radius);
+}
+
+void DisplaySSD1306::drawHorizontalLine(int16_t x, int16_t y, int16_t length) {
+  m_display.drawHorizontalLine(x, y, length);
+}
+
+void DisplaySSD1306::drawVerticalLine(int16_t x, int16_t y, int16_t length) {
+  m_display.drawHorizontalLine(x, y, length);
+}
 
 /*********************/
 /* Display functions */
 /*********************/
+void DisplaySSD1306::flipScreenVertically(){
+  m_display.flipScreenVertically();
+}
+
+void DisplaySSD1306::invertDisplay(void){
+    m_display.invertDisplay();
+}
+
+void DisplaySSD1306::normalDisplay(void) {
+  m_display.normalDisplay();
+}
+
 void DisplaySSD1306::displayOn(void) {
   m_display.displayOn();
 }

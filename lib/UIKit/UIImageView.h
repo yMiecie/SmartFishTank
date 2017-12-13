@@ -14,9 +14,9 @@
 class UIImageView: public UIView  {
 public:
   UIImageView(UIImage *image);
-  ~UIImageView();
+  virtual ~UIImageView();
 
-  void setImage(UIImage *image);
+  virtual void setImage(UIImage *image);
 
   virtual void draw(UIScreen *screen);
 

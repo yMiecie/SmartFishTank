@@ -21,12 +21,12 @@ class UISize;
 class UIScreen {
 public:
   UIScreen(Display *display);
-  ~UIScreen();
+  virtual ~UIScreen();
 
   UIViewController  *viewController;
 
   // Set update the Screen
-  void setTargetFPS(uint8_t fps);
+  virtual void setTargetFPS(uint8_t fps);
 
   // Update screen & return remaining time
   int8_t update();

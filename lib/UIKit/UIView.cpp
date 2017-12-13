@@ -18,7 +18,7 @@
   UIView::~UIView()
   {}
 
-  UIFrame UIView::getBounds() const {
+  UIFrame UIView::getBounds() {
     return UIFrameMake(0, 0, frame.size.width, frame.size.height);
   }
 

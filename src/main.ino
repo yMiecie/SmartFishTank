@@ -4,7 +4,64 @@
 /* P-Name:  Smart Fish Tank */
 /****************************/
 
-#include <sstream>
+#include "images.h"
+#include <DisplaySSD1306.h>
+#include <UIKit.h>
+
+#include "Services/DependenciesServices.h"
+#include "Controllers/SplashViewController.h"
+
+//  OLED display
+Display *_display;
+
+// UI
+UIScreen                    *_screen;
+UINavigationViewController  *_nc;
+
+// DependenciesServices
+DependenciesServices        *_dependencies;
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println();
+  Serial.println();
+
+  // Display
+  _display = new DisplaySSD1306(SDA, SCL);
+  _display->flipScreenVertically();
+  //_display->invertDisplay();
+
+  // UI
+  _screen = new UIScreen(_display);
+
+  // Dependendies
+  _dependencies = new DependenciesServices();
+
+  // Controllers
+  SplashViewController *splashVC =  new SplashViewController(_dependencies);;
+  _nc = new UINavigationViewController(splashVC);
+  _nc->tag = "RootNavigationController";
+  _nc->view->frame.size = _screen->size();
+  _screen->viewController = _nc;
+}
+
+void loop() {
+
+  // Update UIScreen
+  int remainingTimeBudget = _screen->update();
+
+  if (remainingTimeBudget > 0) {
+
+    // You can do some work here
+    // Don't do stuff if you are below your
+    // time budget.
+    _dependencies->loop();
+
+    delay(remainingTimeBudget);
+  }
+}
+
+/*#include <sstream>
 #include "images.h"
 #include <DisplaySSD1306.h>
 #include <UIKit.h>
@@ -55,7 +112,7 @@ void onButtonPressed(uint8_t pin) {
 
         UIViewController* vc = new UIViewController();
 
-        int size = _nc->viewControllers.size();
+        int size = _nc->viewControllers().size();
         std::stringstream ss;
         ss << "ViewController " << size;
         String text = String(ss.str().c_str());
@@ -162,3 +219,4 @@ void loop() {
     delay(remainingTimeBudget);
   }
 }
+*/

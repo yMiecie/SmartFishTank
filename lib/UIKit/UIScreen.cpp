@@ -8,7 +8,7 @@
 #include "UIView.h"
 
 UIScreen::UIScreen(Display *display)
-:m_display(display), m_displayedViewController(NULL)
+:viewController(NULL), m_display(display), m_displayedViewController(NULL)
 {}
 
 UIScreen::~UIScreen()

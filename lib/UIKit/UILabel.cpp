@@ -11,7 +11,7 @@
   {}
 
   UILabel::UILabel(String text)
-  :UIView(), text(text), fontData(nullptr), textAlignment(UITEXT_ALIGNMENT::TEXT_ALIGN_CENTER)
+  :UIView(), text(text), fontData(nullptr), textAlignment(UITEXT_ALIGNMENT::TEXT_ALIGN_LEFT)
   {
     this->type = "UILabel";
   }
@@ -30,8 +30,8 @@
 
     if (fontData != nullptr)
       screen->display()->setFont(fontData);
-    if (fontData != NULL)
-      screen->display()->setTextAlignment((DISPLAY_TEXT_ALIGNMENT)textAlignment);
+
+    screen->display()->setTextAlignment((DISPLAY_TEXT_ALIGNMENT)textAlignment);
 
     screen->display()->drawString(origin.x, origin.y, text);
   }

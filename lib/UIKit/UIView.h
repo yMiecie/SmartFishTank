@@ -50,17 +50,18 @@ class UIView {
 public:
   UIView();
   UIView(UIFrame frame);
-  ~UIView();
+  virtual ~UIView();
 
   UIFrame frame;
-  UIFrame getBounds() const;
-  UIPoint getScreenOrigin();
+  virtual UIFrame getBounds();
+  virtual UIPoint getScreenOrigin();
 
   UIView* superView;
   std::vector<UIView*> subviews;
-  void addSubview(UIView* subview);
-  void removeFromSuperView();
+  virtual void addSubview(UIView* subview);
+  virtual void removeFromSuperView();
 
+  String tag;
   String type;
 
   bool hiden;
@@ -69,13 +70,13 @@ public:
   // All animate function return the id of generated animation.
   // std::function< void (int)> animation :  No return value and takes a single integer value that is the progress factor (0.0->1.0)
   // std::function< void (bool)> completion :  No return value and takes a single Boolean argument that indicates whether or not the animations finished before the completion handler was called.
-  long animate(float duration, std::function< void (float)> animation);
-  long animate(float duration, float delay, std::function< void (float)> animation);
-  long animate(float duration, std::function< void (float)> animation, std::function< void (bool)> completion);
-  long animate(float duration, float delay, std::function< void (float)> animation, std::function< void (bool)> completion);
+  virtual long animate(float duration, std::function< void (float)> animation);
+  virtual long animate(float duration, float delay, std::function< void (float)> animation);
+  virtual long animate(float duration, std::function< void (float)> animation, std::function< void (bool)> completion);
+  virtual long animate(float duration, float delay, std::function< void (float)> animation, std::function< void (bool)> completion);
 
   // Take animation ID return by animate() and return bool, 0 if animation not found & 1 if animation was found and interupted.
-  bool cancelAnimation(long animationId);
+  virtual bool cancelAnimation(long animationId);
 
 private:
   std::vector<UIAnimation> runningAnimations;
