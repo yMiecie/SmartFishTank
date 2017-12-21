@@ -9,8 +9,8 @@
 
 #include "Thermometer.h"
 
-#include <OneWire.h>
-#include <DallasTemperature.h>
+class OneWire;
+class DallasTemperature;
 
 class ThermometerDS18B20: public Thermometer
 {
@@ -22,10 +22,9 @@ public:
   float temperature(uint8_t device);
 
 protected:
-  uint8_t m_pin;
-
-private:
-  DallasTemperature m_sensors;
+  uint8_t           m_pin;
+  OneWire           *m_oneWire;
+  DallasTemperature *m_sensors;
 };
 
 #endif

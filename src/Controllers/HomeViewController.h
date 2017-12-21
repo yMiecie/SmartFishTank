@@ -19,10 +19,14 @@ protected:
   virtual void viewDidLoad();
   virtual void viewDidAppear();
   virtual void viewDidUpdate();
+
+  String getWaterTemperatureString();
+  String getPHString();
+
   void clearTimer();
 
   Timer       *m_timer = NULL;
-  
+
   // Header
   UILabel     *m_temperatureLabel = NULL;
   UIImage     *m_temperatureImage = NULL;

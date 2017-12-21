@@ -19,6 +19,8 @@ public:
 
 protected:
   uint8_t m_pin;
+  float   m_po = 0;
+  float   m_pH = 10;
 
 };
 

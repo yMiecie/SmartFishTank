@@ -17,8 +17,8 @@ public:
   virtual ~BaseController();
 
 protected:
-  DependenciesServices* m_$;
-  UIViewController *m_nextVC = NULL;
+  DependenciesServices  *m_$;
+  UIViewController      *m_nextVC = NULL;
 };
 
 class BaseViewController: public UIViewController, public BaseController {

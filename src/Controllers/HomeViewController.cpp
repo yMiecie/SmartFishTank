@@ -5,6 +5,8 @@
 /****************************/
 
 #include <UIKit.h>
+#include <string>
+#include <sstream>
 #include "HomeViewController.h"
 
 HomeViewController::HomeViewController(DependenciesServices* dependenciesServices)
@@ -54,7 +56,7 @@ void HomeViewController::viewDidLoad() {
     m_temperatureImageView->frame.origin.x = 2;
     view->addSubview(m_temperatureImageView);
 
-    m_temperatureLabel = new UILabel("T:20°C");
+    m_temperatureLabel = new UILabel(getWaterTemperatureString());
     m_temperatureLabel->frame.origin.x = 12;
     m_temperatureLabel->fontData = SansSerif_bold_12;
     view->addSubview(m_temperatureLabel);
@@ -66,7 +68,7 @@ void HomeViewController::viewDidLoad() {
     m_phImageView->frame.origin.x = 68;
     view->addSubview(m_phImageView);
 
-    m_phLabel = new UILabel("pH:7.4");
+    m_phLabel = new UILabel(getPHString());
     m_phLabel->frame.origin.x = 82;
     m_phLabel->fontData = SansSerif_bold_12;
     view->addSubview(m_phLabel);
@@ -150,6 +152,26 @@ void HomeViewController::viewDidUpdate() {
 
 }
 
+/*
+ *  Strings
+ */
+String HomeViewController::getWaterTemperatureString() {
+  std::ostringstream stringStream;
+  stringStream.precision(0);
+  stringStream << "T:" << std::fixed << m_$->temperaturesServices()->getWaterTemperature() << "°C";
+  return stringStream.str().c_str();
+}
+
+String HomeViewController::getPHString() {
+ std::ostringstream stringStream;
+ stringStream.precision(1);
+ stringStream << "pH:" << std::fixed << m_$->phServices()->getPH();
+ return stringStream.str().c_str();
+}
+
+/*
+ *  Clean-up
+ */
 void HomeViewController::clearTimer() {
     if (m_timer != NULL) {
         m_$->timerController()->remove(m_timer->id);

@@ -9,11 +9,11 @@
 
 #include <TimerController.h>
 #include <Sensors.h>
+#include "PHServices.h"
+#include "TemperaturesServices.h"
+#include "WaterLevelServices.h"
 #include "images.h"
 #include "fonts.h"
-
-// Thermometer
-#define PIN_THERMOMETER  27
 
 class DependenciesServices {
 
@@ -24,15 +24,17 @@ public:
   void loop();
 
   // Timer
-  TimerController *timerController();
+  TimerController       *timerController();
+  PHServices            *phServices();
+  TemperaturesServices  *temperaturesServices();
+  WaterLevelServices    *waterLevelServices();
 
-  // Temperature.
-  float getWaterTemperature();
-  float getAirTemperature();
 
 protected:
-  TimerController     *m_timerController = NULL;
-  Thermometer         *m_thermometer;
+  TimerController       *m_timerController = NULL;
+  PHServices            *m_phServices = NULL;
+  TemperaturesServices  *m_temperaturesServices = NULL;
+  WaterLevelServices    *m_waterLevelServices = NULL;
 };
 
 #endif

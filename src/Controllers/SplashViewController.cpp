@@ -63,7 +63,6 @@ void SplashViewController::viewDidAppear() {
     m_$->timerController()->add(m_timer);
 }
 
-
 void SplashViewController::clearTimer() {
     if (m_timer != NULL) {
         m_$->timerController()->remove(m_timer->id);
